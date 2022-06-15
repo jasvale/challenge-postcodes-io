@@ -1,0 +1,159 @@
+<!-- 
+ 	For master page solution check ~
+ 	https://stackoverflow.com/questions/42995991/spring-boot-thymeleaf-is-not-rendering-fragments-correctly
+ 	(Saved the page into google drive, SOFTWARE -> Thymeleaf
+  -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/master">
+<body>
+	<div id="content" layout:fragment="content">
+
+		<!-- Page Heading -->
+		<h1 class="h3 mb-4 text-gray-800">Searched Post Code Information</h1>
+
+		<div class="row">
+			<!-- Content Column -->
+			<div class="col-lg-3 mb-4">
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Distance from
+							London Heathrow airport</h6>
+					</div>
+					<div class="card-body">
+						<table class="table table-hover  table-sm">
+							<tbody>
+								<tr>
+									<th scope="row">Kilometers</th>
+									<td
+										data-th-text="${df.format(postCodeSearchResult.calculatedKilometers)}"></td>
+								</tr>
+								<tr>
+									<th scope="row">Miles</th>
+									<td
+										data-th-text="${df.format(postCodeSearchResult.calculatedMiles)}"></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="card-footer">
+						<a th:href="@{/}" class="btn btn-primary btn-icon-split"> <span
+							class="icon text-white-50"> <i class="fas fa-arrow-left"></i>
+						</span> <span class="text">Search another post code</span>
+						</a>
+					</div>
+				</div>
+			</div>
+			<!-- Content Column -->
+			<div class="col-lg-3 mb-4">
+				<!-- Project Card Example -->
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Post code
+							Information</h6>
+						<!-- Divider -->
+						<hr class="sidebar-divider my-0">
+						<div class="card-body">
+							<table class="table table-bordered table-striped table-sm">
+								<tbody>
+									<tr>
+										<th scope="row">Post Code</th>
+										<td data-th-text="${postCodeSearchResult.postCode}"></td>
+									</tr>
+									<tr>
+										<th scope="row">Country</th>
+										<td data-th-text="${postCodeSearchResult.country}"></td>
+									</tr>
+									<tr>
+										<th scope="row">CCG</th>
+										<td data-th-text="${postCodeSearchResult.ccg}"></td>
+									</tr>
+									<tr>
+										<th scope="row">District</th>
+										<td data-th-text="${postCodeSearchResult.district}"></td>
+									</tr>
+									<tr>
+										<th scope="row">Ward</th>
+										<td data-th-text="${postCodeSearchResult.ward}"></td>
+									</tr>
+									<tr>
+										<th scope="row">LSOA</th>
+										<td data-th-text="${postCodeSearchResult.lsoa}"></td>
+									</tr>
+									<tr>
+										<th scope="row">MSOA</th>
+										<td data-th-text="${postCodeSearchResult.msoa}"></td>
+									</tr>
+									<tr>
+										<th scope="row">Latitude</th>
+										<td data-th-text="${postCodeSearchResult.latitude}"></td>
+									</tr>
+									<tr>
+										<th scope="row">Longitude</th>
+										<td data-th-text="${postCodeSearchResult.longitude}"></td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6 mb-4">
+				<div class="card-header py-3">
+					<h6 class="m-0 font-weight-bold text-primary">Map Location</h6>
+					<!-- Divider -->
+					<hr class="sidebar-divider my-0">
+					<div style="height: 500px; width: 100%;" id="mapdiv"
+						class="card-body"></div>
+				</div>
+			</div>
+		</div>
+		<script th:src="@{http://www.openlayers.org/api/OpenLayers.js}"></script>
+		<script th:src="@{https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js}"></script>
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+				
+				var lat = /*[[${postCodeSearchResult.latitude}]]*/ -0.12755;
+				var lon = /*[[${postCodeSearchResult.longitude}]]*/ 51.507222;
+				
+				var feature = new ol.Feature({
+	                 geometry: new ol.geom.Point(ol.proj.fromLonLat([lon, lat]))
+             	});
+			    
+				feature.setStyle(new ol.style.Style({
+			        image: new ol.style.Circle({
+				          radius: 12,
+				          fill: new ol.style.Fill({color: '#4cc2d0'}),
+				          stroke: new ol.style.Stroke({
+				            color: '#4e73df', width: 1
+				          })
+				        })
+		      	}));
+			
+				var postCode = new ol.layer.Vector({
+				     source: new ol.source.Vector({
+				         features: [
+				        	 feature
+				         ]
+				     }),
+				 });
+				
+			      var map = new ol.Map({
+			        target: 'mapdiv',
+			        layers: [
+			          new ol.layer.Tile({
+			            source: new ol.source.OSM()
+			          }),
+			          postCode
+			        ],
+			        view: new ol.View({
+			          center: ol.proj.fromLonLat([lon, lat]),
+			          zoom: 18
+			        })
+			      });
+			 /*]]>*/
+		</script>
+	</div>
+</body>
+</html>

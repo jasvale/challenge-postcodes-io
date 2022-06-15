@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/master">
+<body>
+	<div id="content" layout:fragment="content">
+		<!-- Page Heading -->
+		<h1 class="h3 mb-4 text-gray-800">Post Code Search</h1>
+		<div class="row">
+			<div class="col-lg-3 mb-4">
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Post code</h6>
+					</div>
+					<div class="card-body">
+						<form action="#" th:action="@{/}" th:object="${searchParameters}"
+							method="POST">
+							<div class="form-group">
+								<input th:field="*{postCode}" type="text" class="form-control"
+									aria-describedby="postcodeHelp"
+									placeholder="Write the post code here" /> <small
+									id="postcodeHelp" class="form-text text-muted">The post
+									code to calculate distances.</small> <span style="color: red"
+									th:if="${#fields.hasErrors('postCode')}"
+									th:errors="*{postCode}"></span>
+							</div>
+							<input type="submit" class="btn btn-primary btn-sm"></input>
+						</form>
+					</div>
+				</div>
+			</div>
+			<!-- Content Column -->
+			<div class="col-lg-9 mb-4">
+				<!-- previousSearchesList Card -->
+				<div class="card shadow mb-4">
+					<!-- Card Header - Accordion -->
+					<a href="#previousSearchesList" class="d-block card-header py-3"
+						data-toggle="collapse" role="button" aria-expanded="true"
+						aria-controls="previousSearchesList">
+						<h6 class="m-0 font-weight-bold text-primary">Previous
+							Searches</h6>
+					</a>
+					<!-- Card Content - Collapse -->
+					<div class="collapse show" id="previousSearchesList">
+						<div class="card-body">
+							<table class="table table-bordered table-striped table-sm">
+								<thead class="thead-dark">
+									<tr>
+										<th>Searched Post Code</th>
+										<th>Country</th>
+										<th>CCG</th>
+										<th>District</th>
+										<th>Ward</th>
+										<th>LSOA</th>
+										<th>MSOA</th>
+										<th>Kilometers</th>
+										<th>Miles</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr th:each="searchedPostCode : ${previousPostCodeIoSearches}">
+										<td th:text="${searchedPostCode.postCode}" />
+										<td th:text="${searchedPostCode.country}" />
+										<td th:text="${searchedPostCode.ccg}" />
+										<td th:text="${searchedPostCode.district}" />
+										<td th:text="${searchedPostCode.ward}" />
+										<td th:text="${searchedPostCode.lsoa}" />
+										<td th:text="${searchedPostCode.msoa}" />
+										<td th:text="${df.format(searchedPostCode.calculatedKilometers)}" />
+										<td th:text="${df.format(searchedPostCode.calculatedMiles)}" />
+									</tr>
+								</tbody>
+								<tbody th:if="${#lists.isEmpty(previousPostCodeIoSearches)}">
+									<tr>
+										<td colspan="7">No previous searches found.</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

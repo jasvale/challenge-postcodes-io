@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorator="layouts/master">
+<body>
+	<div id="content" layout:fragment="content">
+		<!-- Page Heading -->
+		<h1 class="h3 mb-4 text-gray-800">Something unexpected happened, please contact support or follow the link and retry again.</h1>
+		<div class="row">
+			<!-- Content Column -->
+			<div class="col-lg-3 mb-4">
+				<div class="card shadow mb-4">
+					<div class="card-header py-3">
+						<h6 class="m-0 font-weight-bold text-primary">Back to safety</h6>
+					</div>
+					<div class="card-body">
+						<a th:href="@{/}" class="btn btn-primary btn-icon-split"> <span
+							class="icon text-white-50"> <i class="fas fa-arrow-left"></i>
+						</span> <span class="text">Click here</span>
+						</a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
